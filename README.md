@@ -26,7 +26,7 @@ PPO is a policy gradient method designed to stabilize training by limiting updat
 The core training code is in the `train` function of [`PPOAgent`](Agent/PPO.py), and the environment loops in [`SnakeEnv`](Game/Snake.py).
 
 ## Demo
-Below is a demo of the trained agent playing at high speed, occasionally circling around the reward to avoid self-collisions:
+Below is a demo of the trained agent playing, occasionally circling around the reward to avoid self-collisions (it doesn't know its tail's exact position, see [`main.ipynb`](main.ipynb) for the observation space details):
 
 ![Demo GIF placeholder](/assets/demo_agent_10000.gif)
 
