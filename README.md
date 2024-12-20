@@ -26,14 +26,14 @@ PPO is a policy gradient method designed to stabilize training by limiting updat
 The core training code is in the `train` function of [`PPOAgent`](Agent/PPO.py), and the environment loops in [`SnakeEnv`](Game/Snake.py).
 
 ## Demo
-Below is a placeholder for a demo GIF of the trained agent playing at high speed, occasionally circling around the reward:
+Below is a demo of the trained agent playing at high speed, occasionally circling around the reward to avoid self-collisions:
 
-![Demo GIF placeholder](path/to/demo.gif)
+![Demo GIF placeholder](/assets/demo_agent_10000.gif)
 
 ## Results
 The agent’s reward curve increases as it masters collecting food. Episode length first rises with better survival but eventually decreases when it chooses to sacrifice longevity for quicker gains:
 
-![Reward Curves placeholder](path/to/reward_curves.png)
+![Reward Curves placeholder](/assets/rewards_curves_10000.png)
 
 ## Usage
 - Train the agent by running:
