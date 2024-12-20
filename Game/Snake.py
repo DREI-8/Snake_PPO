@@ -23,6 +23,9 @@ class SnakeEnv(gym.Env):
         
         self.action_space = spaces.Discrete(4)  # 4 possible actions
         
+        # Whether to use intermediate rewards when the snake gets closer to the food
+        self.intermediate_rewards = False
+
         # Observation space includes:
         # - Head position (2)
         # - Food position (2)
@@ -187,13 +190,26 @@ class SnakeEnv(gym.Env):
             reward = -10 # Large penalty for game over
             return self._get_obs(), reward, True, False, {}
         
+        reward = -0.01  # Small penalty to encourage finding food quickly
+
+        # Add intermediate reward if enabled
+        if self.intermediate_rewards:
+            # Calculate distance to food before move
+            old_dist = ((self.snake[0][0] - self.food[0])**2 + 
+                        (self.snake[0][1] - self.food[1])**2)**0.5
+            # Calculate distance to food after move
+            new_dist = ((new_head[0] - self.food[0])**2 + 
+                        (new_head[1] - self.food[1])**2)**0.5
+            
+            if new_dist < old_dist:
+                reward += 0.1  # Small reward for getting closer
+
         self.snake.insert(0, new_head)
         
-        reward = -0.01  # Small penalty to encourage finding food quickly
         if new_head == self.food:
             self.score += 1
             self.food = self._place_food()
-            reward = 10.0
+            reward = 10.0 # Large reward for finding food
         else:
             self.snake.pop()
         
@@ -202,6 +218,16 @@ class SnakeEnv(gym.Env):
             
         return self._get_obs(), reward, False, False, {"score": self.score}
     
+    def add_intermediate_rewards(self, enable=True):
+        """
+        Enable intermediate rewards when the snake gets closer to the food.
+        
+        Parameters
+        ----------
+        - enable (bool): Whether to enable intermediate rewards
+        """
+        self.intermediate_rewards = enable
+
     def render(self):
         """
         Render the game state visually.
@@ -243,10 +269,28 @@ class SnakeEnv(gym.Env):
             food_pos, self.grid_size//2)
         
         pygame.display.flip()
+
+    def change_render_mode(self, mode):
+        """
+        Change the rendering mode.
+        
+        Parameters
+        ----------
+        - mode (str): New rendering mode ('human' for visual display, None for no rendering)
+        """
+        if mode == "human":
+            pygame.init()
+            self.display = pygame.display.set_mode((self.width, self.height))
+            pygame.display.set_caption('Snake Game')
+        else:
+            self.display = None
+            pygame.quit()
+
+        self.render_mode = mode
         
     def close(self):
         """
-        Clean up the environment and close the display.
+        Close the display.
         """
         if self.display is not None:
             pygame.quit()
