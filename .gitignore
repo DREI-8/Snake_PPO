@@ -6,6 +6,10 @@ __pycache__/
 # C extensions
 *.so
 
+# custom
+stats_2000_epochs.png 
+stats_10000_epochs.png
+
 # Distribution / packaging
 .Python
 build/
